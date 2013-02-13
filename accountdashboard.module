@@ -1,0 +1,82 @@
+<?php
+
+function accountdashboard_menu(){
+	$items['user/%/changeusername'] = array(
+		'title' => 'Username',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('accountdashboard_changeusername_form',1),
+		'access callback' => TRUE,
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 10,
+	);
+	$items['user/%/changepasswd'] = array(
+		'title' => 'Password',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('accountdashboard_changepassword_form', 1),
+		'access callback' => TRUE,
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 11,
+	);
+	return $items;
+}
+
+function accountdashboard_changepassword_form($form,&$form_state, $uid){
+	// $form['username'] = array(
+	// 	'#title' => t('Change Username for User'),
+	// 	'#type' => 'textfield',
+	// 	'#value' => user_load($uid)->name,
+	// 	'#disabled' => FALSE,
+	// );
+	$form['new_passwd'] = array(
+		'#title' => t('New Password'),
+		'#type' => 'password',
+		'#required' => TRUE,
+	);
+	$form['verify_passwd'] = array(
+		'#title' => t('Verify Password'),
+		'#type' => 'password',
+		'#required' => TRUE,
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit'),
+	);
+	return $form;
+}
+
+function accountdashboard_changepassword_form_submit($form,&$form_state){
+	$passwd = $form_state['values']['new_passwd'];
+	global $user;
+	$account = user_load($user->uid);
+	user_save($account,array('pass' => $passwd));
+}
+
+function accountdashboard_changeusername_form($form,&$form_state, $uid){
+	// $form['current_username'] = array(
+	// 	'#title' => t('Current Username'),
+	// 	'#type' => 'textfield',
+	// 	'#value' => user_load($uid)->name,
+	// );
+	$form['new_username'] = array(
+		'#title' => t('New Username'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+	$form['verify_username'] = array(
+		'#title' => t('Verify username'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit'),
+	);
+	return $form;
+}
+
+function accountdashboard_changeusername_form_submit($form,&$form_state){
+	$name = $form_state['values']['new_username'];
+	global $user;
+	$account = user_load($user->uid);
+	user_save($account,array('name' => $name));
+}
