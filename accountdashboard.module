@@ -21,12 +21,6 @@ function accountdashboard_menu(){
 }
 
 function accountdashboard_changepassword_form($form,&$form_state, $uid){
-	// $form['username'] = array(
-	// 	'#title' => t('Change Username for User'),
-	// 	'#type' => 'textfield',
-	// 	'#value' => user_load($uid)->name,
-	// 	'#disabled' => FALSE,
-	// );
 	$form['new_passwd'] = array(
 		'#title' => t('New Password'),
 		'#type' => 'password',
@@ -52,11 +46,6 @@ function accountdashboard_changepassword_form_submit($form,&$form_state){
 }
 
 function accountdashboard_changeusername_form($form,&$form_state, $uid){
-	// $form['current_username'] = array(
-	// 	'#title' => t('Current Username'),
-	// 	'#type' => 'textfield',
-	// 	'#value' => user_load($uid)->name,
-	// );
 	$form['new_username'] = array(
 		'#title' => t('New Username'),
 		'#type' => 'textfield',
