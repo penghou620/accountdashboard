@@ -1,27 +1,137 @@
 <?php
 
+
+
 /**
  * Implements hook_menu().
  */
 
 function accountdashboard_menu(){
-	$items['user/%/changeusername'] = array(
-		'title' => 'Username',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('accountdashboard_changeusername_form',1),
+	// $items['user/%/changeusername'] = array(
+	// 	'title' => 'Username',
+	// 	'page callback' => 'drupal_get_form',
+	// 	'page arguments' => array('accountdashboard_changeusername_form',1),
+	// 	'access callback' => TRUE,
+	// 	'type' => MENU_LOCAL_TASK,
+	// 	'weight' => 10,
+	// );
+	// $items['user/%/changepasswd'] = array(
+	// 	'title' => 'Password',
+	// 	'page callback' => 'drupal_get_form',
+	// 	'page arguments' => array('accountdashboard_changepassword_form', 1),
+	// 	'access callback' => TRUE,
+	// 	'type' => MENU_LOCAL_TASK,
+	// 	'weight' => 11,
+	// );
+	$items['accountdashboard'] = array(
+		'title' => 'account dashboard',
+		'page callback' => 'blogsummary_get_posts',
+		'page arguments' => array('5'),
 		'access callback' => TRUE,
-		'type' => MENU_LOCAL_TASK,
-		'weight' => 10,
+		'type' => MENU_NORMAL_ITEM,
+		'weight' => -10,
+		'menu_name' => 'accountdashboard',
+		'file' => 'blogsummary.module',
+		'file path' => drupal_get_path('module', 'blogsummary'),
 	);
-	$items['user/%/changepasswd'] = array(
-		'title' => 'Password',
+	$items['accountinfomation'] = array(
+		'title' => 'account information',
 		'page callback' => 'drupal_get_form',
-		'page arguments' => array('accountdashboard_changepassword_form', 1),
+		'page arguments' => array('accountdashboard_editaccountinformation_form'),
 		'access callback' => TRUE,
-		'type' => MENU_LOCAL_TASK,
-		'weight' => 11,
+		'type' => MENU_NORMAL_ITEM,
+		'weight' => -9,
+		'menu_name' => 'accountdashboard',
 	);
+	// $items['changeusername'] = array(
+	// 	'title' => 'Change Username',
+	// 	'page callback' => 'drupal_get_form',
+	// 	'page arguments' => array('accountdashboard_changeusername_form',1),
+	// 	'access callback' => TRUE,
+	// 	'type' => MENU_NORMAL_ITEM,
+	// 	'weight' => 0,
+	// 	'menu_name' => 'accountdashboard',
+	// );
+	// $items['changepasswd'] = array(
+	// 	'title' => 'Change Password',
+	// 	'page callback' => 'drupal_get_form',
+	// 	'page arguments' => array('accountdashboard_changepassword_form', 1),
+	// 	'access callback' => TRUE,
+	// 	'type' => MENU_NORMAL_ITEM,
+	// 	'weight' => 0,
+	// 	'menu_name' => 'accountdashboard',
+	// );
 	return $items;
+}
+
+function accountdashboard_editaccountinformation_form($form, &$form_state){
+	global $user;
+	$form['username'] = array(
+		'#title' => t('User Name'),
+		'#type' => 'textfield',
+		// '#default_value' => $user->name,
+		// '#required' => TRUE,
+	);
+	// $form['lastname'] = array(
+	// 	'#title' => t('Last Name'),
+	// 	'#type' => 'textfield',
+	// 	'#required' => TRUE,
+	// );
+	$form['email'] = array(
+		'#title' => t('Email Address'),
+		'#type' => 'textfield',
+		// '#required' => TRUE,
+	);
+	// $form['currentpasswd'] = array(
+	// 	'#title' => t('Current Password'),
+	// 	'#type' => 'password',
+	// 	'#required' => TRUE,
+	// );
+	// $form['newpasswd'] = array(
+	// 	'#title' => t('New Password'),
+	// 	'#type' => 'password',
+	// 	'#required' => TRUE,
+	// );
+	$form['pass'] = array(
+		// '#title' => t('Confirm New Password'),
+		'#type' => 'password_confirm',
+		// '#required' => TRUE,
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit'),
+	);
+	return $form;
+}
+function accountdashboard_editaccountinformation_form_validate($form, &$form_state){
+	global $user;
+	$account = user_load($user->uid);
+	$username = $form_state['values']['username'];
+	$pass = $form_state['values']['pass'];
+	$email = $form_state['values']['email'];
+	if($username == '' and $email == '' and $pass == ''){
+		form_set_error('username',"Nothing Changed");
+	}
+	
+}
+function accountdashboard_editaccountinformation_form_submit($form, &$form_state){
+	global $user;
+	$changes = array();
+	$account = user_load($user->uid);
+	$username = $form_state['values']['username'];
+	$email = $form_state['values']['email'];
+	if($username != '' and $username !== $account->name){
+		$changes['name'] = $username;
+	}
+	if($email != '' and $email !== $account->mail){
+		$change['mail'] = $email;
+	}
+	$pass = $form_state['values']['pass'];
+	if(!(user_check_password($account->pass,$account))){
+		$changes['pass'] = $pass;
+	}
+	drupal_set_message($username.$pass.$email);
+	//user_save($account,$changes);
 }
 
 /**

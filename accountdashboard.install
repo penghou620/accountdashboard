@@ -1,0 +1,11 @@
+<?php
+
+function accountdashboard_install(){
+	$t = get_t();
+	$menu = array(
+			'menu_name' => 'accountdashboard',
+			'title' => $t('Account Dashboard'),
+			'description' => $t('The <em>Dashboard</em> menu contains links for users'),
+	);
+	menu_save($menu);
+}

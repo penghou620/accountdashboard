@@ -3,3 +3,5 @@ description = Change Username or Password, etc
 package = Peng Hou
 core = 7.x
 files[] = accountdashboard.module
+
+dependencies[] = blogsummary
