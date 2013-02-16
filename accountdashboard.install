@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Implement hook_install()
+ *
+ * Create a new menu "account dashboard"
+ */
 function accountdashboard_install(){
 	$t = get_t();
 	$menu = array(
