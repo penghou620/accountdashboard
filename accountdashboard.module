@@ -25,8 +25,7 @@ function accountdashboard_menu(){
 	// );
 	$items['accountdashboard'] = array(
 		'title' => 'account dashboard',
-		'page callback' => 'blogsummary_get_posts',
-		'page arguments' => array('5'),
+		'page callback' => 'accountdashboard_view',
 		'access callback' => TRUE,
 		'type' => MENU_NORMAL_ITEM,
 		'weight' => -10,
@@ -69,33 +68,21 @@ function accountdashboard_editaccountinformation_form($form, &$form_state){
 	$form['username'] = array(
 		'#title' => t('User Name'),
 		'#type' => 'textfield',
-		// '#default_value' => $user->name,
-		// '#required' => TRUE,
+		'#default_value' => $user->name,
 	);
-	// $form['lastname'] = array(
-	// 	'#title' => t('Last Name'),
-	// 	'#type' => 'textfield',
-	// 	'#required' => TRUE,
-	// );
 	$form['email'] = array(
 		'#title' => t('Email Address'),
 		'#type' => 'textfield',
-		// '#required' => TRUE,
 	);
-	// $form['currentpasswd'] = array(
-	// 	'#title' => t('Current Password'),
-	// 	'#type' => 'password',
-	// 	'#required' => TRUE,
-	// );
-	// $form['newpasswd'] = array(
-	// 	'#title' => t('New Password'),
-	// 	'#type' => 'password',
-	// 	'#required' => TRUE,
-	// );
+	$form['currentpasswd'] = array(
+		'#title' => t('Current Password'),
+		'#type' => 'password',
+		'#required' => TRUE,
+	);
 	$form['pass'] = array(
-		// '#title' => t('Confirm New Password'),
+		//Do not need title. A title add automatically
+		// '#title' => t('Confirm New Password'),  
 		'#type' => 'password_confirm',
-		// '#required' => TRUE,
 	);
 	$form['submit'] = array(
 		'#type' => 'submit',
@@ -190,4 +177,9 @@ function accountdashboard_changeusername_form_submit($form,&$form_state){
 	global $user;
 	$account = user_load($user->uid);
 	user_save($account,array('name' => $name));
+}
+
+function accountdashboard_view(){
+	module_invoke_all('accountdashboard_view');
+	accountdashboard_build_content();
 }

@@ -3,14 +3,14 @@
 /**
  * Implement hook_install()
  *
- * Create a new menu "account dashboard"
+ * Create a new menu-tree "account dashboard"
  */
 function accountdashboard_install(){
 	$t = get_t();
 	$menu = array(
 			'menu_name' => 'accountdashboard',
 			'title' => $t('Account Dashboard'),
-			'description' => $t('The <em>Dashboard</em> menu contains links for users'),
+			'description' => $t('The <em>Dashboard</em> menu contains links for users profile page'),
 	);
 	menu_save($menu);
 }
